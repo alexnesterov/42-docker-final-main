@@ -25,6 +25,7 @@ type ParcelRepository interface {
 
 type ParcelService interface {
 	Register(client int, address string) (Parcel, error)
+	GetByClient(client int) ([]Parcel, error)
 	PrintClientParcels(client int) error
 	NextStatus(number int) error
 	ChangeAddress(number int, address string) error

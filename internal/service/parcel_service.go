@@ -36,6 +36,10 @@ func (s *ParcelService) Register(client int, address string) (domain.Parcel, err
 	return parcel, nil
 }
 
+func (s *ParcelService) GetByClient(client int) ([]domain.Parcel, error) {
+	return s.repo.GetByClient(client)
+}
+
 func (s *ParcelService) PrintClientParcels(client int) error {
 	parcels, err := s.repo.GetByClient(client)
 	if err != nil {

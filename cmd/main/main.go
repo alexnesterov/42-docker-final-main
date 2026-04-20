@@ -3,9 +3,11 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"net/http"
 
 	_ "modernc.org/sqlite"
 
+	parcelhttp "github.com/Yandex-Practicum/42-docker-final/internal/handler/http"
 	"github.com/Yandex-Practicum/42-docker-final/internal/repository/sqlite"
 	"github.com/Yandex-Practicum/42-docker-final/internal/service"
 )
@@ -21,60 +23,12 @@ func main() {
 	store := sqlite.NewParcelStore(db)
 	svc := service.NewParcelService(store)
 
-	client := 1
-	address := "Псков, д. Пушкина, ул. Колотушкина, д. 5"
-	p, err := svc.Register(client, address)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+	mux := http.NewServeMux()
+	handler := parcelhttp.NewParcelHandler(svc)
+	handler.Register(mux)
 
-	newAddress := "Саратов, д. Верхние Зори, ул. Козлова, д. 25"
-	err = svc.ChangeAddress(p.Number, newAddress)
-	if err != nil {
+	fmt.Println("listening on :8080")
+	if err := http.ListenAndServe(":8080", mux); err != nil {
 		fmt.Println(err)
-		return
-	}
-
-	err = svc.NextStatus(p.Number)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	err = svc.PrintClientParcels(client)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	err = svc.Delete(p.Number)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	err = svc.PrintClientParcels(client)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	p, err = svc.Register(client, address)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	err = svc.Delete(p.Number)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	err = svc.PrintClientParcels(client)
-	if err != nil {
-		fmt.Println(err)
-		return
 	}
 }
