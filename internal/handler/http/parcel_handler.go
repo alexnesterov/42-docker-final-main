@@ -25,16 +25,13 @@ func (h *ParcelHandler) Register(mux *http.ServeMux) {
 }
 
 func (h *ParcelHandler) register(w http.ResponseWriter, r *http.Request) {
-	var req struct {
-		Client  int    `json:"client"`
-		Address string `json:"address"`
-	}
+	var req domain.RegisterRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	parcel, err := h.service.Register(req.Client, req.Address)
+	parcel, err := h.service.Register(req)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -81,15 +78,14 @@ func (h *ParcelHandler) changeAddress(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var req struct {
-		Address string `json:"address"`
-	}
+	var req domain.ChangeAddressRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
+	req.Number = number
 
-	if err := h.service.ChangeAddress(number, req.Address); err != nil {
+	if err := h.service.ChangeAddress(req); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

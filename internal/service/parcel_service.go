@@ -15,11 +15,11 @@ func NewParcelService(repo domain.ParcelRepository) *ParcelService {
 	return &ParcelService{repo: repo}
 }
 
-func (s *ParcelService) Register(client int, address string) (domain.Parcel, error) {
+func (s *ParcelService) Register(req domain.RegisterRequest) (domain.Parcel, error) {
 	parcel := domain.Parcel{
-		Client:    client,
+		Client:    req.Client,
 		Status:    domain.ParcelStatusRegistered,
-		Address:   address,
+		Address:   req.Address,
 		CreatedAt: time.Now().UTC().Format(time.RFC3339),
 	}
 
@@ -77,8 +77,8 @@ func (s *ParcelService) NextStatus(number int) error {
 	return s.repo.SetStatus(number, nextStatus)
 }
 
-func (s *ParcelService) ChangeAddress(number int, address string) error {
-	return s.repo.SetAddress(number, address)
+func (s *ParcelService) ChangeAddress(req domain.ChangeAddressRequest) error {
+	return s.repo.SetAddress(req.Number, req.Address)
 }
 
 func (s *ParcelService) Delete(number int) error {
