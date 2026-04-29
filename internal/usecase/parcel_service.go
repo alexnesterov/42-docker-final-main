@@ -1,21 +1,22 @@
-package service
+package usecase
 
 import (
 	"fmt"
 	"time"
 
 	"github.com/Yandex-Practicum/42-docker-final/internal/domain"
+	"github.com/Yandex-Practicum/42-docker-final/internal/port"
 )
 
 type ParcelService struct {
-	repo domain.ParcelRepository
+	repo port.ParcelRepository
 }
 
-func NewParcelService(repo domain.ParcelRepository) *ParcelService {
+func NewParcelService(repo port.ParcelRepository) *ParcelService {
 	return &ParcelService{repo: repo}
 }
 
-func (s *ParcelService) Register(req domain.RegisterRequest) (domain.Parcel, error) {
+func (s *ParcelService) Register(req port.RegisterRequest) (domain.Parcel, error) {
 	parcel := domain.Parcel{
 		Client:    req.Client,
 		Status:    domain.ParcelStatusRegistered,
@@ -77,7 +78,7 @@ func (s *ParcelService) NextStatus(number int) error {
 	return s.repo.SetStatus(number, nextStatus)
 }
 
-func (s *ParcelService) ChangeAddress(req domain.ChangeAddressRequest) error {
+func (s *ParcelService) ChangeAddress(req port.ChangeAddressRequest) error {
 	return s.repo.SetAddress(req.Number, req.Address)
 }
 

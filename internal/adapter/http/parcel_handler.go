@@ -5,14 +5,14 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/Yandex-Practicum/42-docker-final/internal/domain"
+	"github.com/Yandex-Practicum/42-docker-final/internal/port"
 )
 
 type ParcelHandler struct {
-	service domain.ParcelService
+	service port.ParcelService
 }
 
-func NewParcelHandler(service domain.ParcelService) *ParcelHandler {
+func NewParcelHandler(service port.ParcelService) *ParcelHandler {
 	return &ParcelHandler{service: service}
 }
 
@@ -25,7 +25,7 @@ func (h *ParcelHandler) Register(mux *http.ServeMux) {
 }
 
 func (h *ParcelHandler) register(w http.ResponseWriter, r *http.Request) {
-	var req domain.RegisterRequest
+	var req port.RegisterRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -78,7 +78,7 @@ func (h *ParcelHandler) changeAddress(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var req domain.ChangeAddressRequest
+	var req port.ChangeAddressRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return

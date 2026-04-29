@@ -7,9 +7,9 @@ import (
 
 	_ "modernc.org/sqlite"
 
-	parcelhttp "github.com/Yandex-Practicum/42-docker-final/internal/handler/http"
-	"github.com/Yandex-Practicum/42-docker-final/internal/repository/sqlite"
-	"github.com/Yandex-Practicum/42-docker-final/internal/service"
+	adapterhttp "github.com/Yandex-Practicum/42-docker-final/internal/adapter/http"
+	"github.com/Yandex-Practicum/42-docker-final/internal/adapter/sqlite"
+	"github.com/Yandex-Practicum/42-docker-final/internal/usecase"
 )
 
 func main() {
@@ -21,10 +21,10 @@ func main() {
 	defer db.Close()
 
 	store := sqlite.NewParcelStore(db)
-	svc := service.NewParcelService(store)
+	svc := usecase.NewParcelService(store)
 
 	mux := http.NewServeMux()
-	handler := parcelhttp.NewParcelHandler(svc)
+	handler := adapterhttp.NewParcelHandler(svc)
 	handler.Register(mux)
 
 	fmt.Println("listening on :8080")
