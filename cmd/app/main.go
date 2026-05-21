@@ -9,7 +9,7 @@ import (
 
 	adapterhttp "github.com/Yandex-Practicum/42-docker-final/internal/adapter/http"
 	"github.com/Yandex-Practicum/42-docker-final/internal/adapter/sqlite"
-	"github.com/Yandex-Practicum/42-docker-final/internal/usecase"
+	"github.com/Yandex-Practicum/42-docker-final/internal/domain/usecase"
 )
 
 func main() {

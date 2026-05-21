@@ -1,6 +1,6 @@
 package port
 
-import "github.com/Yandex-Practicum/42-docker-final/internal/domain"
+import "github.com/Yandex-Practicum/42-docker-final/internal/domain/entity"
 
 type RegisterRequest struct {
 	Client  int    `json:"client"`
@@ -13,8 +13,8 @@ type ChangeAddressRequest struct {
 }
 
 type ParcelService interface {
-	Register(RegisterRequest) (domain.Parcel, error)
-	GetByClient(client int) ([]domain.Parcel, error)
+	Register(RegisterRequest) (entity.Parcel, error)
+	GetByClient(client int) ([]entity.Parcel, error)
 	PrintClientParcels(client int) error
 	NextStatus(number int) error
 	ChangeAddress(ChangeAddressRequest) error

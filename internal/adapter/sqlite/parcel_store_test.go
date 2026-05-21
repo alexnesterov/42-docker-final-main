@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 	_ "modernc.org/sqlite"
 
-	"github.com/Yandex-Practicum/42-docker-final/internal/domain"
+	"github.com/Yandex-Practicum/42-docker-final/internal/domain/entity"
 )
 
 var (
@@ -17,10 +17,10 @@ var (
 	randRange  = rand.New(randSource)
 )
 
-func getTestParcel() domain.Parcel {
-	return domain.Parcel{
+func getTestParcel() entity.Parcel {
+	return entity.Parcel{
 		Client:    1000,
-		Status:    domain.ParcelStatusRegistered,
+		Status:    entity.ParcelStatusRegistered,
 		Address:   "test",
 		CreatedAt: time.Now().UTC().Format(time.RFC3339),
 	}
@@ -93,12 +93,12 @@ func TestSetStatus(t *testing.T) {
 	require.NoError(t, err)
 	require.NotEmpty(t, parcel.Number)
 
-	err = store.SetStatus(parcel.Number, domain.ParcelStatusSent)
+	err = store.SetStatus(parcel.Number, entity.ParcelStatusSent)
 	require.NoError(t, err)
 
 	stored, err := store.Get(parcel.Number)
 	require.NoError(t, err)
-	require.Equal(t, domain.ParcelStatusSent, stored.Status)
+	require.Equal(t, entity.ParcelStatusSent, stored.Status)
 }
 
 func TestGetByClient(t *testing.T) {
@@ -106,12 +106,12 @@ func TestGetByClient(t *testing.T) {
 	defer db.Close()
 	store := NewParcelStore(db)
 
-	parcels := []domain.Parcel{
+	parcels := []entity.Parcel{
 		getTestParcel(),
 		getTestParcel(),
 		getTestParcel(),
 	}
-	parcelMap := map[int]domain.Parcel{}
+	parcelMap := map[int]entity.Parcel{}
 
 	client := randRange.Intn(10_000_000)
 	parcels[0].Client = client

@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/Yandex-Practicum/42-docker-final/internal/port"
+	"github.com/Yandex-Practicum/42-docker-final/internal/domain/port"
 )
 
 type ParcelHandler struct {

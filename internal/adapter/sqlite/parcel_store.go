@@ -3,7 +3,7 @@ package sqlite
 import (
 	"database/sql"
 
-	"github.com/Yandex-Practicum/42-docker-final/internal/domain"
+	"github.com/Yandex-Practicum/42-docker-final/internal/domain/entity"
 )
 
 type ParcelStore struct {
@@ -14,7 +14,7 @@ func NewParcelStore(db *sql.DB) *ParcelStore {
 	return &ParcelStore{db: db}
 }
 
-func (s *ParcelStore) Add(p domain.Parcel) (int, error) {
+func (s *ParcelStore) Add(p entity.Parcel) (int, error) {
 	res, err := s.db.Exec("INSERT INTO parcel (client, status, address, created_at) VALUES (:client, :status, :address, :created_at)",
 		sql.Named("client", p.Client),
 		sql.Named("status", p.Status),
@@ -32,8 +32,8 @@ func (s *ParcelStore) Add(p domain.Parcel) (int, error) {
 	return int(id), nil
 }
 
-func (s *ParcelStore) Get(number int) (domain.Parcel, error) {
-	p := domain.Parcel{}
+func (s *ParcelStore) Get(number int) (entity.Parcel, error) {
+	p := entity.Parcel{}
 
 	row := s.db.QueryRow("SELECT number, client, status, address, created_at FROM parcel WHERE number = :number",
 		sql.Named("number", number))
@@ -45,7 +45,7 @@ func (s *ParcelStore) Get(number int) (domain.Parcel, error) {
 	return p, nil
 }
 
-func (s *ParcelStore) GetByClient(client int) ([]domain.Parcel, error) {
+func (s *ParcelStore) GetByClient(client int) ([]entity.Parcel, error) {
 	rows, err := s.db.Query("SELECT number, client, status, address, created_at FROM parcel WHERE client = :client",
 		sql.Named("client", client))
 	if err != nil {
@@ -53,9 +53,9 @@ func (s *ParcelStore) GetByClient(client int) ([]domain.Parcel, error) {
 	}
 	defer rows.Close()
 
-	var res []domain.Parcel
+	var res []entity.Parcel
 	for rows.Next() {
-		p := domain.Parcel{}
+		p := entity.Parcel{}
 
 		err := rows.Scan(&p.Number, &p.Client, &p.Status, &p.Address, &p.CreatedAt)
 		if err != nil {
@@ -84,7 +84,7 @@ func (s *ParcelStore) SetAddress(number int, address string) error {
 	_, err := s.db.Exec("UPDATE parcel SET address = :address WHERE number = :number AND status = :status",
 		sql.Named("address", address),
 		sql.Named("number", number),
-		sql.Named("status", domain.ParcelStatusRegistered))
+		sql.Named("status", entity.ParcelStatusRegistered))
 
 	return err
 }
@@ -92,7 +92,7 @@ func (s *ParcelStore) SetAddress(number int, address string) error {
 func (s *ParcelStore) Delete(number int) error {
 	_, err := s.db.Exec("DELETE FROM parcel WHERE number = :number AND status = :status",
 		sql.Named("number", number),
-		sql.Named("status", domain.ParcelStatusRegistered))
+		sql.Named("status", entity.ParcelStatusRegistered))
 
 	return err
 }

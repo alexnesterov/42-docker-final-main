@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/Yandex-Practicum/42-docker-final/internal/domain"
-	"github.com/Yandex-Practicum/42-docker-final/internal/port"
+	"github.com/Yandex-Practicum/42-docker-final/internal/domain/entity"
+	"github.com/Yandex-Practicum/42-docker-final/internal/domain/port"
 )
 
 type ParcelService struct {
@@ -16,10 +16,10 @@ func NewParcelService(repo port.ParcelRepository) *ParcelService {
 	return &ParcelService{repo: repo}
 }
 
-func (s *ParcelService) Register(req port.RegisterRequest) (domain.Parcel, error) {
-	parcel := domain.Parcel{
+func (s *ParcelService) Register(req port.RegisterRequest) (entity.Parcel, error) {
+	parcel := entity.Parcel{
 		Client:    req.Client,
-		Status:    domain.ParcelStatusRegistered,
+		Status:    entity.ParcelStatusRegistered,
 		Address:   req.Address,
 		CreatedAt: time.Now().UTC().Format(time.RFC3339),
 	}
@@ -37,7 +37,7 @@ func (s *ParcelService) Register(req port.RegisterRequest) (domain.Parcel, error
 	return parcel, nil
 }
 
-func (s *ParcelService) GetByClient(client int) ([]domain.Parcel, error) {
+func (s *ParcelService) GetByClient(client int) ([]entity.Parcel, error) {
 	return s.repo.GetByClient(client)
 }
 
@@ -65,11 +65,11 @@ func (s *ParcelService) NextStatus(number int) error {
 
 	var nextStatus string
 	switch parcel.Status {
-	case domain.ParcelStatusRegistered:
-		nextStatus = domain.ParcelStatusSent
-	case domain.ParcelStatusSent:
-		nextStatus = domain.ParcelStatusDelivered
-	case domain.ParcelStatusDelivered:
+	case entity.ParcelStatusRegistered:
+		nextStatus = entity.ParcelStatusSent
+	case entity.ParcelStatusSent:
+		nextStatus = entity.ParcelStatusDelivered
+	case entity.ParcelStatusDelivered:
 		return nil
 	}
 
