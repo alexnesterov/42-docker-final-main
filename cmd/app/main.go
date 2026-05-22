@@ -8,7 +8,7 @@ import (
 	_ "modernc.org/sqlite"
 
 	adapterhttp "github.com/Yandex-Practicum/42-docker-final/internal/adapter/http"
-	"github.com/Yandex-Practicum/42-docker-final/internal/adapter/sqlite"
+	"github.com/Yandex-Practicum/42-docker-final/internal/infrastructure/sqlite"
 	"github.com/Yandex-Practicum/42-docker-final/internal/domain/usecase"
 )
 

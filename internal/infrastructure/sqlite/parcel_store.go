@@ -1,4 +1,4 @@
-// Package sqlite содержит SQLite-адаптер для хранения посылок.
+// Package sqlite содержит SQLite-реализацию репозитория посылок.
 package sqlite
 
 import (
