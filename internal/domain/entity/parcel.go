@@ -1,3 +1,4 @@
+// Package entity содержит доменные сущности трекера посылок.
 package entity
 
 const (

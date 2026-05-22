@@ -1,3 +1,4 @@
+// Package port содержит интерфейсы и типы запросов для взаимодействия между слоями.
 package port
 
 import "github.com/Yandex-Practicum/42-docker-final/internal/domain/entity"

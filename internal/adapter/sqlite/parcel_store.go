@@ -1,3 +1,4 @@
+// Package sqlite содержит SQLite-адаптер для хранения посылок.
 package sqlite
 
 import (
@@ -51,7 +52,7 @@ func (s *ParcelStore) GetByClient(client int) ([]entity.Parcel, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
+	defer func() { _ = rows.Close() }()
 
 	var res []entity.Parcel
 	for rows.Next() {
