@@ -1,3 +1,4 @@
+// Package usecase содержит бизнес-логику трекера посылок.
 package usecase
 
 import (
