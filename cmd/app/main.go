@@ -8,8 +8,8 @@ import (
 	_ "modernc.org/sqlite"
 
 	adapterhttp "github.com/Yandex-Practicum/42-docker-final/internal/adapter/http"
-	"github.com/Yandex-Practicum/42-docker-final/internal/infrastructure/sqlite"
 	"github.com/Yandex-Practicum/42-docker-final/internal/domain/usecase"
+	"github.com/Yandex-Practicum/42-docker-final/internal/infrastructure/sqlite"
 )
 
 func main() {
@@ -18,7 +18,7 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-	defer db.Close()
+	defer func() { _ = db.Close() }()
 
 	store := sqlite.NewParcelStore(db)
 	svc := usecase.NewParcelService(store)
